@@ -1,0 +1,416 @@
+-
+  country: Ireland
+  countryCode: IE
+  name: Ireland
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424803
+  woeid: 23424803
+-
+  country: United Kingdom
+  countryCode: GB
+  name: United Kingdom
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424975
+  woeid: 23424975
+-
+  country: Mexico
+  countryCode: MX
+  name: Mexico
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424900
+  woeid: 23424900
+-
+  country: United States
+  countryCode: US
+  name: Boston
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2367105
+  woeid: 2367105
+-
+  country: United States
+  countryCode: US
+  name: Washington
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2514815
+  woeid: 2514815
+-
+  country: United States
+  countryCode: US
+  name: Miami
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2450022
+  woeid: 2450022
+-
+  country: Brazil
+  countryCode: BR name="S\303\243o Paulo"
+  parentid: 23424768
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/455827
+  woeid: 455827
+-
+  country: United States
+  countryCode: US
+  name: Baltimore
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2358820
+  woeid: 2358820
+-
+  country: India
+  countryCode: IN
+  name: India
+  parentid: 1
+  placeType:
+    code: 12   
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424848
+  woeid: 23424848
+-
+  country: ''
+  countryCode: ''
+  name: Worldwide
+  placeType:
+    code: 19
+    name: Supername
+  url: http://where.yahooapis.com/v1/place/1
+  woeid: 1
+-
+  country: Colombia
+  countryCode: CO
+  name: Colombia
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424787
+  woeid: 23424787
+-
+  country: Italy
+  countryCode: IT
+  name: Italy
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424853
+  woeid: 23424853
+-
+  country: United States
+  countryCode: US
+  name: Detroit
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2391585
+  woeid: 2391585
+-
+  country: Argentina
+  countryCode: AR
+  name: Argentina
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424747
+  woeid: 23424747
+-
+  country: Netherlands
+  countryCode: NL
+  name: Netherlands
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424909
+  woeid: 23424909
+-
+  country: United States
+  countryCode: US
+  name: New York
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2459115
+  woeid: 2459115
+-
+  country: Australia
+  countryCode: AU
+  name: Australia
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424748
+  woeid: 23424748
+-
+  country: United States
+  countryCode: US
+  name: United States
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424977
+  woeid: 23424977
+-
+  country: United States
+  countryCode: US
+  name: San Antonio
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2487796
+  woeid: 2487796
+-
+  country: France
+  countryCode: FR
+  name: France
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424819
+  woeid: 23424819
+-
+  country: Chile
+  countryCode: CL
+  name: Chile
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424782
+  woeid: 23424782
+-
+  country: United States
+  countryCode: US
+  name: Minneapolis
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2452078
+  woeid: 2452078
+-
+  country: United States
+  countryCode: US
+  name: Philadelphia
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2471217
+  woeid: 2471217
+-
+  country: United States
+  countryCode: US
+  name: Chicago
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2379574
+  woeid: 2379574
+-
+  country: Brazil
+  countryCode: BR
+  name: Brazil
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424768
+  woeid: 23424768
+-
+  country: United States
+  countryCode: US
+  name: Houston
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2424766
+  woeid: 2424766
+-
+  country: United States
+  countryCode: US
+  name: San Francisco
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2487956
+  woeid: 2487956
+-
+  country: United States
+  countryCode: US
+  name: Los Angeles
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2442047
+  woeid: 2442047
+-
+  country: Venezuela
+  countryCode: VE
+  name: Venezuela
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424982
+  woeid: 23424982
+-
+  country: Canada
+  countryCode: CA
+  name: Canada
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424775
+  woeid: 23424775
+-
+  country: Spain
+  countryCode: ES
+  name: Spain
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424950
+  woeid: 23424950
+-
+  country: Australia
+  countryCode: AU
+  name: Sydney
+  parentid: 23424748
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/1105779
+  woeid: 1105779
+-
+  country: Singapore
+  countryCode: SG
+  name: Singapore
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424948
+  woeid: 23424948
+-
+  country: United States
+  countryCode: US
+  name: Atlanta
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2357024
+  woeid: 2357024
+-
+  country: Indonesia
+  countryCode: ID
+  name: Indonesia
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424846
+  woeid: 23424846
+-
+  country: Germany
+  countryCode: DE
+  name: Germany
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424829
+  woeid: 23424829
+-
+  country: United States
+  countryCode: US name="Dallas-Ft. Worth"
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2388929
+  woeid: 2388929
+-
+  country: Brazil
+  countryCode: BR
+  name: Rio de Janeiro
+  parentid: 23424768
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/455825
+  woeid: 455825
+-
+  country: United Kingdom
+  countryCode: GB
+  name: London
+  parentid: 23424975
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/44418
+  woeid: 44418
+-
+  country: Canada
+  countryCode: CA
+  name: Toronto
+  parentid: 23424775
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/4118
+  woeid: 4118
+-
+  country: Turkey
+  countryCode: TR
+  name: Turkey
+  parentid: 1
+  placeType:
+    code: 12
+    name: Country
+  url: http://where.yahooapis.com/v1/place/23424969
+  woeid: 23424969
+-
+  country: United States
+  countryCode: US
+  name: Seattle
+  parentid: 23424977
+  placeType:
+    code: 7
+    name: Town
+  url: http://where.yahooapis.com/v1/place/2490383 woeid=2490383>]
