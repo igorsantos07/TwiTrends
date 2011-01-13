@@ -22,9 +22,13 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
   trends = twitter.local_trends(acc['woeid'])
   puts trends.inspect
 
+	def concat trends, plus=0
+		trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' | ')
+	end
+
 	[
-		$format % [time, trends[0..4].join(' | ')],
-		$format % [time, trends[5..9].join(' | ')]
+		$format % [time, concat(trends[0..4]) ],
+		$format % [time, concat(trends[5..9],5) ]
 	].each do |tweet|
 		if $debug
 			puts "Tweet >> "+tweet
