@@ -27,8 +27,8 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 	end
 
 	[
-		$format % [time, concat(trends[0..4]) ],
-		$format % [time, concat(trends[5..9],5) ]
+		$format % [time, concat(trends[5..9],5) ],
+		$format % [time, concat(trends[0..4]) ]
 	].each do |tweet|
 		if $debug
 			puts "Tweet >> "+tweet
