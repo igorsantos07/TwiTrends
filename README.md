@@ -8,5 +8,3 @@
 `$ git clone git://codaset.com/igorsantos07/twitrends.git twitrends`  
 
 `$ sudo echo "/20 * * * *   root   ruby -rubygems -I <<pasta>>/twitrends/ <<pasta>>/tt.rb >>/var/log/twitrends.log 2>&1" >> /etc/crontab`  
-
-`$ echo "<pre><?php chdir('<<pasta>>/twitrends/'); system('git pull'); ?></pre>" > /var/www/update_trends.php`
