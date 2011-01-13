@@ -23,7 +23,7 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
   puts trends.inspect
 
 	def concat trends, plus=0
-		trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' | ')
+		trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' || ')
 	end
 
 	[
