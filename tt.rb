@@ -4,9 +4,10 @@ $debug = false
 $format = '[%s] %s' # [time] Trending topics
 
 now  = Time.now
-time = ('%2d'%now.hour)+'h'+('%2d'%now.min)
+time = now.hour.to_s+'h'+('%02d'%now.min)
 
-YAML::load_file('accounts.yaml').each_pair do |title, acc|
+yaml_file = (File.exists? 'accounts.yaml')? 'accounts.yaml' : $LOAD_PATH[0]+'/accounts.yaml'
+YAML::load_file(yaml_file).each_pair do |title, acc|
   print "Getting Trending Topics and tweeting to #{title}..."
 
   Twitter.configure do |c|
