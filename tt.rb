@@ -1,5 +1,5 @@
 require 'twitter'
-$debug = false
+$debug = true
 
 $format = '[%s] %s' # [time] Trending topics
 
@@ -31,9 +31,10 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 		$format % [time, concat(trends[0..4]) ]
 	].each do |tweet|
 		if $debug
-			puts "Tweet >> "+tweet
+			puts "Tweet (#{tweet.length} chars) >> "+tweet
 		else
 			twitter.update tweet
+			twitter.update "d igorgsantos Tweet over 140 chars (#{tweet.length})! \"#{tweet[0..80]}\"" if tweet.length > 140
 		end
 	end
 
