@@ -1,0 +1,15 @@
+CREATE TABLE accounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    tweets INTEGER NOT NULL DEFAULT '0'
+);
+
+CREATE TABLE stats (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    account INTEGER NOT NULL
+        REFERENCES account(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+    date INTEGER NOT NULL,
+    followers INTEGER NOT NULL
+);
