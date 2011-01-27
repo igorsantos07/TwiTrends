@@ -1,0 +1,42 @@
+@blue: #B2DFDA;
+@lightBlue: #D6EEEB;
+
+.clear { clear: both; }
+
+body {
+    background: @blue url(/imgs/bg.gif) no-repeat left top;
+    margin: 0px;
+    font-family: Ubuntu, sans-serif;
+}
+
+h1, h2 {
+    width: 100%;
+    text-align: center;
+    text-shadow: white 3px 3px 3px;
+}
+
+a {
+    color: #92A654;
+    font-weight: bold;
+    text-decoration: none;
+    :hover { text-decoration: underline; }
+}
+
+#menu, #chart {
+    float: left;
+    margin: 10px;
+    padding: 10px;
+}
+#menu {
+    background-color: @lightBlue;
+    opacity: 0.60;
+
+    ul {
+        list-style-type: none;
+        text-align: center;
+        padding: 0px;
+    }
+}
+#chart {
+    padding-top: 0px;
+}

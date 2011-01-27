@@ -1,0 +1,26 @@
+!!! 5
+%html
+  %head
+    %title TwiTrends Statistics
+    %meta{'http-equiv' => "Content-Type", :content => "text/html; charset=UTF-8"}
+    %link{:rel => "stylesheet", :type => "text/css", :href => css('styles')}
+
+  %body
+    %h1 TwiTrends Statistics
+
+    #menu
+      %h2 Statistics for...
+      %ul
+        %li
+          %a{:href=>'/weekly'} One week
+        %li
+          %a{:href=>'/monthly'} One Month
+        %li
+          %a{:href=>'/yearly'} One Year
+        %li
+          %a{:href=>'/all_time'} All the time
+
+    #chart
+      %img{:src=>@data[:img]}
+
+    .clear
