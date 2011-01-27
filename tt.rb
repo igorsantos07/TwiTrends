@@ -1,5 +1,5 @@
 require 'twitter'
-$debug = true
+$debug = false
 
 $format = '[%s] %s' # [time] Trending topics
 
