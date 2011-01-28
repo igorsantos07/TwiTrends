@@ -8,19 +8,20 @@
   %body
     %h1 TwiTrends Statistics
 
-    #menu
-      %h2 Statistics for...
-      %ul
-        %li
-          %a{:href=>'/weekly'} One week
-        %li
-          %a{:href=>'/monthly'} One Month
-        %li
-          %a{:href=>'/yearly'} One Year
-        %li
-          %a{:href=>'/all_time'} All the time
+    #container
+      #menu
+        %h2 Statistics for...
+        %ul
+          %li
+            %a{:href=>'/weekly'} One week
+          %li
+            %a{:href=>'/monthly'} One Month
+          %li
+            %a{:href=>'/yearly'} One Year
+          %li
+            %a{:href=>'/all_time'} All the time
 
-    #chart
-      %img{:src=>@data[:img]}
+      #chart
+        %img{:src=>@data[:img]}
 
-    .clear
+      .clear
