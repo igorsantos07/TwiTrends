@@ -18,9 +18,10 @@ get '/css/*.css' do | file |
 end
 
 get %r{/([\w]*)} do |period|
-  @data = !period.nil? && Charts.method_defined?(('Charts.'+period).to_sym)?
-    eval('Charts.'+period) :
-    Charts.all_time
+  chart = Charts.new
+  @data = (!(period.nil? or period.empty?) and Charts.method_defined?(period.to_sym))?
+    eval('chart.'+period) :
+    chart.all_time
 
   haml :index
 end

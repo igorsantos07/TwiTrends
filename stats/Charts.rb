@@ -1,46 +1,98 @@
+require 'sqlite3'
+
 class Charts
-  def Charts.monthly
-    'monthly'
+  def initialize
+    @db = SQLite3::Database.new settings.db
+
+    @data = {}
+    @db.execute('SELECT name FROM accounts') { |acc| @data[acc[0]] = Array.new }
   end
 
-  def Charts.weekly
-    'weekly'
+  def monthly
+		generate_img_url
   end
 
-  def Charts.yearly
-    'yearly'
+  def weekly
+		generate_img_url
   end
 
-  def Charts.all_time
-		@data= { :img => self.generate_img_url(data) }
+  def yearly
+		generate_img_url
   end
 
-	## private ##
-	def Charts.generate_img_url data
-		'http://chart.googleapis.com/chart?cht=lc'+
-		'&chdl=TrendingUSA|TrendsSP|TrendsRJ'+ #names
-		'&chds=0,150,0,150,0,150'+ # min,max for each datagroup
-		'&chd=t:'+  #data
-			'10,25,135|'+
-			'5,7,9|'+
-			'0,0,10'+
+  def all_time
+    @db.execute('SELECT name, date, followers FROM stats s JOIN accounts a ON (s.account = a.id)') do |values|
+      @data[values[0]] << {
+        :date => Time.at(values[1].to_i),
+        :followers => values[2]
+      }
+    end
 
-		'&chxt=x,x,y,y'+ #what axis to show
-		'&chxp=1,50|3,50'+ #axis position
-		'&chxl='+ #axis values
-			'0:|14/10|19/10|24/10|'+
-			'1:|Dates|'+
-			'2:|0|30|60|90|120|150|'+
-			'3:|Followers'+
+		generate_img_url
+  end
 
-		'&chs=800x350'+ #dimensions
-		'&chma=10,10,10,10'+ #margin
+  #############
+    private
+  #############
 
-		'&chco=FF0000,0000FF,888888'+ #line colors
-		'&chf=bg,s,B2DFDA00|c,s,D6EEEB'+ #last 2 zeroes for bg makes it fully transparent
+	def generate_img_url
+    #TODO can i join those two lines in only one?
+    chart_data_arr = []
+    chart_labels = []
 
-		'&chg=50,20'+
-		'&chls=3|3|3'+ #line style (tickness, dash length, space length)
-		'&chm=o,FF0000,0,1,6|o,0000FF,1,1,6|o,888888,2,1,6' #bullets (type, color, datagroup, which points, size)
+    #populating data array
+    i = 0
+    chart_data_arr = @data.values.collect do |acc_data|
+      followers = []
+      followers = acc_data.collect do |dataset|
+        chart_labels << dataset[:date] if i == 0
+        dataset[:followers]
+      end
+      i += 1
+
+      followers
+    end
+
+    #finding min and max for chart size and joining data
+    #TODO can i join those two lines in only one?
+    min = []
+    max = []
+    chart_data = chart_data_arr.collect! do |data|
+      min << data.min.to_i
+      max << data.max.to_i
+      data.join(',')
+    end.join '|'
+
+    min = min.min
+    max = max.max
+    chart_data_size = @data.length.times.collect do
+      (min.to_i-50).to_s+','+
+      (max.to_i+50).to_s
+    end.join ','
+
+		{ :img =>
+      'http://chart.googleapis.com/chart?cht=lc'+
+      '&chdl='+@data.keys.join('|')+ #names
+      '&chds='+chart_data_size+ # min,max for each datagroup
+      '&chd=t:'+chart_data+  #data
+
+      '&chxt=x,x,y,y'+ #what axis to show
+      '&chxp=1,50|3,50'+ #axis position
+      '&chxl='+ #axis values
+        '0:|'+chart_labels.join('|')+'|'+
+        '1:|Dates|'+
+        '2:|'+min.to_s+'|'+(max-min/2).to_s+'|'+max.to_s+'|'+
+        '3:|Followers'+
+
+      '&chs=800x350'+ #dimensions
+      '&chma=10,10,10,10'+ #margin
+
+      '&chco=FF0000,0000FF,888888'+ #line colors
+      '&chf=bg,s,B2DFDA00|c,s,D6EEEB'+ #last 2 zeroes for bg makes it fully transparent
+
+      '&chg=50,20'+
+      '&chls=3|3|3'+ #line style (tickness, dash length, space length)
+      '&chm=o,FF0000,0,1,6|o,0000FF,1,1,6|o,888888,2,1,6' #bullets (type, color, datagroup, which points, size)
+    }
 	end
 end
