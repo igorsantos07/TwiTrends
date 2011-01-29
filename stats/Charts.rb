@@ -23,7 +23,7 @@ class Charts
   def all_time
     @db.execute('SELECT name, date, followers FROM stats s JOIN accounts a ON (s.account = a.id)') do |values|
       @data[values[0]] << {
-        :date => Time.at(values[1].to_i),
+        :date => Time.at(values[1].to_i).strftime('%Y-%m-%d %Hh'),
         :followers => values[2]
       }
     end
