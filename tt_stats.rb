@@ -15,7 +15,19 @@ YAML::load_file(yaml_file).each_key do |account|
     db.execute 'SELECT id FROM accounts WHERE name=?', account
   end
 
-  followers = Twitter.user(account).followers_count
-		db.execute 'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', acc_id, Time.now.to_i, followers unless $debug
+	followers = ''
+	got_error = false
+	while trends.empty? do
+		begin
+			print 'Trying to connect again. ' if got_error
+			followers = Twitter.user(account).followers_count
+		rescue SocketError => e
+			puts ' Oops! Are you connected? Trying again in 10 seconds.'
+			got_error = true
+			sleep 10
+		end
+	end
+
+	db.execute 'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', acc_id, Time.now.to_i, followers unless $debug
   puts "Now, #{account}(#{acc_id}) has #{followers} follow#{'s' if followers > 1}."
 end
