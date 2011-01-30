@@ -1,5 +1,5 @@
 require 'twitter'
-$debug = false
+$debug = true
 
 $format = '[%s] %s' # [time] Trending topics
 
@@ -19,7 +19,18 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 
   twitter = Twitter::Client.new
 
-  trends = twitter.local_trends(acc['woeid'])
+	trends = ''
+	got_error = false
+	while trends.empty? do
+		begin
+			print 'Trying to connect again. ' if got_error
+			trends = twitter.local_trends(acc['woeid'])
+		rescue SocketError => e
+			puts ' Oops! Are you connected? Trying again in 10 seconds.'
+			got_error = true
+			sleep 10
+		end
+	end
   puts trends.inspect
 
 	def concat trends, plus=0
