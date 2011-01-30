@@ -1,27 +1,49 @@
 require 'sqlite3'
 
+DAY = 60*60*24
+WEEK = DAY * 7
+MONTH = DAY * 30
+YEAR = MONTH * 12
+
+TODAY = Time.mktime(Time.new.year, Time.new.month, Time.new.day).to_i
+
 class Charts
   def initialize
     @db = SQLite3::Database.new settings.db
 
     @data = {}
     @db.execute('SELECT name FROM accounts') { |acc| @data[acc[0]] = Array.new }
-  end
 
-  def monthly
-		generate_img_url
+    @today = Time.mktime(Time.new.year, Time.new.month, Time.new.day).to_i
+    @default_query = 'SELECT name, date, followers FROM stats s JOIN accounts a ON (s.account = a.id)'
   end
 
   def weekly
-		generate_img_url
+    make_query @default_query+" WHERE date => #{Time.at(TODAY - WEEK)} AND date <= #{TODAY}"
+    generate_img_url
+  end
+
+  def monthly
+    make_query @default_query+" WHERE date => #{Time.at(TODAY - MONTH)} AND date <= #{TODAY}"
+    generate_img_url
   end
 
   def yearly
-		generate_img_url
+    make_query @default_query+" WHERE date => #{Time.at(TODAY - YEAR)} AND date <= #{TODAY}"
+    generate_img_url
   end
 
   def all_time
-    @db.execute('SELECT name, date, followers FROM stats s JOIN accounts a ON (s.account = a.id)') do |values|
+    make_query @default_query
+    generate_img_url
+  end
+
+  #############
+    private
+  #############
+
+  def make_query query
+    @db.execute(query) do |values|
       @data[values[0]] << {
         :date => Time.at(values[1].to_i).strftime('%Y-%m-%d %Hh'),
         :followers => values[2]
@@ -30,10 +52,6 @@ class Charts
 
 		generate_img_url
   end
-
-  #############
-    private
-  #############
 
 	def generate_img_url
     #TODO can i join those two lines in only one?
