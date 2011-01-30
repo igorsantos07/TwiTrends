@@ -3,9 +3,6 @@ $debug = true
 
 $format = '[%s] %s' # [time] Trending topics
 
-now  = Time.now
-time = now.hour.to_s+'h'+('%02d'%now.min)
-
 yaml_file = (File.exists? 'accounts.yaml')? 'accounts.yaml' : $LOAD_PATH[0]+'/accounts.yaml'
 YAML::load_file(yaml_file).each_pair do |title, acc|
   print "Getting Trending Topics and tweeting to #{title}..."
@@ -36,6 +33,9 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 	def concat trends, plus=0
 		trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' || ')
 	end
+
+	now  = Time.now
+	time = now.hour.to_s+'h'+('%02d'%now.min)
 
 	[
 		$format % [time, concat(trends[5..9],5) ],
