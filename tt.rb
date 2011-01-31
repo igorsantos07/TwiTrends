@@ -1,5 +1,14 @@
+start = Time.now
+
 require 'twitter'
-$debug = true
+
+if (ARGV[0] == '-t')
+	$debug = false
+	puts "Tweeting for real. If I should't do that, CTRL+C NOW! And then, run me again without -t flag, you bastard."
+else
+	$debug = true
+	puts "Entering debug mode (a.k.a. won't tweet for real). If you want to tweet, use -t flag and be happy."
+end
 
 $format = '[%s] %s' # [time] Trending topics
 
@@ -18,7 +27,7 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 
 	trends = ''
 	got_error = false
-	while trends.empty? do
+	while trends.empty? and (Time.now - start) < 60 * 15 do # gives up after 15 minutes
 		begin
 			print 'Trying to connect again. ' if got_error
 			trends = twitter.local_trends(acc['woeid'])
