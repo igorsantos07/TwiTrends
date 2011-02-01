@@ -23,9 +23,9 @@ YAML::load_file(yaml_file).each_key do |account|
     db.execute 'SELECT id FROM accounts WHERE name=?', account
   end
 
-	followers = ''
+	followers = nil
 	got_error = false
-	while followers.empty? and (Time.now - start) < 60 * 60 * 12 do # gives up after 12 hours
+	while followers.nil? and (Time.now - start) < 60 * 60 * 12 do # gives up after 12 hours
 		begin
 			print 'Trying to connect again. ' if got_error
 			followers = Twitter.user(account).followers_count
