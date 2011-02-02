@@ -15,9 +15,9 @@ end
 db = SQLite3::Database.new((File.exists? 'stats.db')? 'stats.db' : $LOAD_PATH[0]+'/stats.db')
 
 yaml_file = (File.exists? 'accounts.yaml')? 'accounts.yaml' : $LOAD_PATH[0]+'/accounts.yaml'
-YAML::load_file(yaml_file).each_key do |account|
+YAML::load_file(yaml_file).each_pais do |account,data|
   acc_id = if db.get_first_value('SELECT COUNT(*) FROM accounts WHERE name=?', account) == '0'
-    db.execute 'INSERT INTO accounts (name) VALUES (?)', account
+    db.execute 'INSERT INTO accounts (name,color) VALUES (?,?)', account, data['color']
     db.last_insert_row_id
   else
     db.execute 'SELECT id FROM accounts WHERE name=?', account
