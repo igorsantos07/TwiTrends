@@ -12,9 +12,10 @@ class Charts
     @db = SQLite3::Database.new settings.db
 
     @data = {}
-    @db.execute('SELECT name, color FROM accounts') do |acc|
+    @db.execute('SELECT name, color, tweets FROM accounts') do |acc|
 			@data[acc[0]] = {
 				:color => acc[1],
+        :tweets => acc[2],
 				:stats => [],
         :last_followers => 0
 			}
@@ -25,17 +26,17 @@ class Charts
   end
 
   def weekly
-    make_query @default_query+" WHERE date => #{Time.at($today - $week)} AND date <= #{$today}"
+    make_query @default_query+" WHERE date >= #{Time.at($today - $week).to_i} AND date <= #{$today}"
     generate_img_url
   end
 
   def monthly
-    make_query @default_query+" WHERE date => #{Time.at($today - $month)} AND date <= #{$today}"
+    make_query @default_query+" WHERE date >= #{Time.at($today - $month).to_i} AND date <= #{$today}"
     generate_img_url
   end
 
   def yearly
-    make_query @default_query+" WHERE date => #{Time.at($today - $year)} AND date <= #{$today}"
+    make_query @default_query+" WHERE date >= #{Time.at($today - $year).to_i} AND date <= #{$today}"
     generate_img_url
   end
 
@@ -49,6 +50,7 @@ class Charts
   #############
 
   def make_query query
+    puts query
     @db.execute(query) do |values|
       values[2] = values[2].to_i
       @data[values[0]][:stats] << {
@@ -102,8 +104,9 @@ class Charts
 		chart_legends = @data.collect { |acc, data| "#{acc} (#{data[:last_followers]})" }
 
 		c = -1
-		{ :img =>
-      'http://chart.googleapis.com/chart?cht=lc'+
+		{
+      :data => @data,
+      :img => 'http://chart.googleapis.com/chart?cht=lc'+
       '&chdl='+chart_legends.join('|')+ #names
       '&chds='+chart_data_size.join(',')+ # min,max for each datagroup
       '&chd=t:'+chart_data.join('|')+  #data

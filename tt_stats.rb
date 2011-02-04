@@ -28,7 +28,9 @@ YAML::load_file(yaml_file).each_pair do |account,data|
 	while followers.nil? and (Time.now - start) < 60 * 60 * 12 do # gives up after 12 hours
 		begin
 			print 'Trying to connect again. ' if got_error
-			followers = Twitter.user(account).followers_count
+      user = Twitter.user account
+      followers = user.followers_count
+      tweets = user.statuses_count
 		rescue SocketError => e
 			puts ' Oops! Are you connected? Trying again in 10 seconds.'
 			got_error = true
@@ -36,6 +38,9 @@ YAML::load_file(yaml_file).each_pair do |account,data|
 		end
 	end
 
-	db.execute 'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', acc_id, Time.now.to_i, followers unless $debug
-  puts "Now, #{account}(#{acc_id}) has #{followers} follow#{'s' if followers > 1}."
+  if (!$debug)
+    db.execute 'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', acc_id, Time.now.to_i, followers
+    db.execute 'UPDATE accounts SET tweets=? WHERE id=?', tweets, acc_id
+  end
+  puts "Now, #{account}(#{acc_id}) has #{followers} follower#{'s' if followers > 1} and #{tweets} tweet#{'s' if tweets > 1}."
 end

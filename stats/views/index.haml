@@ -21,7 +21,15 @@
           %li
             %a{:href=>'/all_time'} All the time
 
-      #chart
+      #data
         %img{:src=>@data[:img]}
+
+        #tweets
+          %h2 Total tweets
+          %table{:align => 'center'}
+            - @data[:data].each_pair do |acc, data|
+              %tr
+                %th=acc
+                %td=data[:tweets]
 
       .clear
