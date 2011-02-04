@@ -12,11 +12,11 @@ class Charts
     @db = SQLite3::Database.new settings.db
 
     @data = {}
-    @db.execute('SELECT name, tweets, color FROM accounts') do |acc|
+    @db.execute('SELECT name, color FROM accounts') do |acc|
 			@data[acc[0]] = {
-				:legend => "#{acc[0]} (#{acc[1]})",
-				:color => acc[2],
-				:stats => []
+				:color => acc[1],
+				:stats => [],
+        :last_followers => 0
 			}
 		end
 
@@ -50,10 +50,12 @@ class Charts
 
   def make_query query
     @db.execute(query) do |values|
+      values[2] = values[2].to_i
       @data[values[0]][:stats] << {
         :date => Time.at(values[1].to_i).strftime('%m-%d %Hh'),
         :followers => values[2]
       }
+      @data[values[0]][:last_followers] = values[2] if @data[values[0]][:last_followers] < values[2]
     end
 
 		generate_img_url
@@ -79,8 +81,6 @@ class Charts
       followers
     end
 
-		chart_legends = @data.collect { |acc, data| data[:legend] }
-
     #finding min and max for chart size and joining data
     #TODO can i join those two lines in only one?
     min = []
@@ -99,8 +99,9 @@ class Charts
       (min.to_i-50).to_s+','+(max.to_i+50).to_s
     end
 
-		c = -1
+		chart_legends = @data.collect { |acc, data| "#{acc} (#{data[:last_followers]})" }
 
+		c = -1
 		{ :img =>
       'http://chart.googleapis.com/chart?cht=lc'+
       '&chdl='+chart_legends.join('|')+ #names
