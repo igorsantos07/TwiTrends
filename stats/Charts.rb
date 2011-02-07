@@ -54,7 +54,7 @@ class Charts
     @db.execute(query) do |values|
       values[2] = values[2].to_i
       @data[values[0]][:stats] << {
-        :date => Time.at(values[1].to_i).strftime('%m-%d %Hh'),
+        :date => Time.at(values[1].to_i).strftime('%m-%d'),
         :followers => values[2]
       }
       @data[values[0]][:last_followers] = values[2] if @data[values[0]][:last_followers] < values[2]
@@ -70,12 +70,20 @@ class Charts
 
     #populating data array
     i = 0
+		l = 0
 		line_colors = []
     chart_data_arr = @data.values.collect do |acc_data|
 			line_colors << acc_data[:color]
       followers = []
       followers = acc_data[:stats].collect do |dataset|
-        chart_labels << dataset[:date] if i == 0
+        if i == 0
+					if l % 2 == 0
+						chart_labels << dataset[:date]
+					else
+						chart_labels << ' '
+					end
+					l += 1
+				end
         dataset[:followers]
       end
       i += 1
