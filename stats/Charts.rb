@@ -50,7 +50,6 @@ class Charts
   #############
 
   def make_query query
-    puts query
     @db.execute(query) do |values|
       values[2] = values[2].to_i
       @data[values[0]][:stats] << {
