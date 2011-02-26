@@ -6,4 +6,4 @@ set({
 
 configure do |app|
 	app.also_reload 'config/*.rb', '*.rb'
-end
+end if development?
