@@ -1,8 +1,11 @@
 start = Time.now
 
+require 'rubygems'
 require 'twitter'
 
-if (ARGV[0] == '-t')
+verbose = ARGV.any? { |v| v == '-v' || v == '--verbose' }
+
+if (ARGV.any? { |v| v == '-t' })
 	$debug = false
 	puts "Tweeting for real. If I should't do that, CTRL+C NOW! And then, run me again without -t flag, you bastard."
 else
@@ -14,7 +17,7 @@ $format = '[%s] %s' # [time] Trending topics
 
 yaml_file = (File.exists? 'accounts.yaml')? 'accounts.yaml' : $LOAD_PATH[0]+'/accounts.yaml'
 YAML::load_file(yaml_file).each_pair do |title, acc|
-  print "Getting Trending Topics and tweeting to #{title}..."
+  print "Getting Trending Topics and tweeting to #{title}..." if verbose
 
   Twitter.configure do |c|
     c.consumer_key       = acc['consumer_key']
@@ -32,12 +35,19 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 			print 'Trying to connect again. ' if got_error
 			trends = twitter.local_trends(acc['woeid'])
 		rescue SocketError => e
-			puts ' Oops! Are you connected? Trying again in 10 seconds.'
+      puts (verbose)? ' Oops! Are you connected? Trying again in 10 seconds.' : ''
 			got_error = true
 			sleep 10
 		end
 	end
-  puts trends.inspect
+
+  if $debug
+    if trends.length == 10
+      puts 'OK for '+title
+    else
+      puts "Something is wrong with the trends for #{title}: "+trends.inspect
+    end
+  end
 
 	def concat trends, plus=0
 		trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' || ')
@@ -51,12 +61,12 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 		$format % [time, concat(trends[0..4]) ]
 	].each do |tweet|
 		if $debug
-			puts "Tweet (#{tweet.length} chars) >> "+tweet
+			puts "Tweet (#{tweet.length} chars) >> "+tweet if verbose
 		else
 			twitter.update tweet
 			twitter.update "d igorgsantos Tweet over 140 chars (#{tweet.length})! \"#{tweet[0..80]}\"" if tweet.length > 140
 		end
 	end
 
-	puts ''
+	puts '' if verbose
 end
