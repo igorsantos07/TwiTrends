@@ -1,3 +1,5 @@
+ACCOUNTS_FILE = '/home/igoru/scripts/twitrends/accounts.yaml'
+
 start = Time.now
 
 require 'rubygems'
@@ -15,8 +17,7 @@ end
 
 $format = '[%s] %s' # [time] Trending topics
 
-yaml_file = (File.exists? 'accounts.yaml')? 'accounts.yaml' : $LOAD_PATH[0]+'/accounts.yaml'
-YAML::load_file(yaml_file).each_pair do |title, acc|
+YAML::load_file(ACCOUNTS_FILE).each_pair do |title, acc|
   print "Getting Trending Topics and tweeting to #{title}..." if verbose
 
   Twitter.configure do |c|
@@ -34,8 +35,8 @@ YAML::load_file(yaml_file).each_pair do |title, acc|
 		begin
 			print 'Trying to connect again. ' if got_error
 			trends = twitter.local_trends(acc['woeid'])
-		rescue SocketError => e
-      puts (verbose)? ' Oops! Are you connected? Trying again in 10 seconds.' : ''
+		rescue SocketError, OpenSSL::SSL::SSLError, Errno::ECONNRESET => e
+      puts (verbose)? ' Oops! Are you connected ('+e.class.to_s+')? Trying again in 10 seconds.' : e.class.to_s
 			got_error = true
 			sleep 10
 		end
