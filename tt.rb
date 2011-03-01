@@ -42,7 +42,7 @@ YAML::load_file(ACCOUNTS_FILE).each_pair do |title, acc|
 		end
 	end
 
-  if $debug
+  if !verbose
     if trends.length == 10
       puts 'OK for '+title
     else
