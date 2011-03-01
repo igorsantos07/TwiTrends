@@ -2,3 +2,5 @@ nbproject
 accounts.yaml
 .svn
 *.db
+*.time
+*.log
