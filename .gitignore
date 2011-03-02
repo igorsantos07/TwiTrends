@@ -4,3 +4,4 @@ accounts.yaml
 *.db
 *.time
 *.log
+*.pid
