@@ -30,6 +30,11 @@ class Charts
     generate_img_url
   end
 
+	def biweekly
+    make_query @default_query+" WHERE date >= #{Time.at($today - $week*2).to_i} AND date <= #{$today}"
+    generate_img_url
+	end
+
   def monthly
     make_query @default_query+" WHERE date >= #{Time.at($today - $month).to_i} AND date <= #{$today}"
     generate_img_url
