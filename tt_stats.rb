@@ -16,7 +16,7 @@ db = SQLite3::Database.new((File.exists? 'stats.db')? 'stats.db' : $LOAD_PATH[0]
 
 yaml_file = (File.exists? 'accounts.yaml')? 'accounts.yaml' : $LOAD_PATH[0]+'/accounts.yaml'
 YAML::load_file(yaml_file).each_pair do |account,data|
-  acc_id = if db.get_first_value('SELECT COUNT(*) FROM accounts WHERE name=?', account) == '0'
+  acc_id = if db.get_first_value('SELECT COUNT(*) FROM accounts WHERE name=?', account) == 0
     db.execute 'INSERT INTO accounts (name,color) VALUES (?,?)', account, data['account']['color']
     db.last_insert_row_id
   else
@@ -30,6 +30,7 @@ YAML::load_file(yaml_file).each_pair do |account,data|
 			print 'Trying to connect again. ' if got_error
       user = Twitter.user account
       followers = user.followers_count
+      if !followers then followers = 1 end
       tweets = user.statuses_count
 		rescue SocketError => e
 			puts ' Oops! Are you connected? Trying again in 10 seconds.'
@@ -39,6 +40,7 @@ YAML::load_file(yaml_file).each_pair do |account,data|
 	end
 
   if (!$debug)
+    puts "'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', #{acc_id}, Time.now.to_i, #{followers}"
     db.execute 'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', acc_id, Time.now.to_i, followers
     db.execute 'UPDATE accounts SET tweets=? WHERE id=?', tweets, acc_id
   end
