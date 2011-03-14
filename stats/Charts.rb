@@ -55,14 +55,28 @@ class Charts
   #############
 
   def make_query query
+		last_date = ''
     @db.execute(query) do |values|
       values[2] = values[2].to_i
+
+			date = Time.at(values[1].to_i).strftime('%m-%d')
       @data[values[0]][:stats] << {
-        :date => Time.at(values[1].to_i).strftime('%m-%d'),
+        :date => date,
         :followers => values[2]
-      }
-      @data[values[0]][:last_followers] = values[2] if @data[values[0]][:last_followers] < values[2]
+      } unless @data[values[0]][:stats].any? { |data| data[:date] == last_date } # won't repeat dates
+			last_date = date
+
+			@data[values[0]][:last_followers] = values[2] if @data[values[0]][:last_followers] < values[2]
     end
+
+		totals = {}
+		@data.each_pair { |acc, data| totals[acc] = data[:stats].length }
+		max_total = totals.values.max
+		totals.each_pair do |acc, total|
+			if (total < max_total)
+				@data[acc][:stats].unshift(Array.new(max_total - total, 0)).flatten!
+			end
+		end
 
 		generate_img_url
   end
@@ -74,20 +88,15 @@ class Charts
 
     #populating data array
     i = 0
-		l = 0
 		line_colors = []
     chart_data_arr = @data.values.collect do |acc_data|
+			l = 0
 			line_colors << acc_data[:color]
       followers = []
       followers = acc_data[:stats].collect do |dataset|
-        if i == 0
-					if l % 2 == 0
-						chart_labels << dataset[:date]
-					else
-						chart_labels << ' '
-					end
-					l += 1
-				end
+				chart_labels[l] = if l % 2 == 0 then dataset[:date] else ' ' end
+				l += 1
+
         dataset[:followers]
       end
       i += 1
@@ -109,8 +118,8 @@ class Charts
     max = max.max
 		chart_lines_style = []
     chart_data_size = @data.length.times.collect do
-			chart_lines_style << 3
-      (min.to_i-50).to_s+','+(max.to_i+50).to_s
+			chart_lines_style << 2 # tickness
+      min.to_s+','+max.to_s
     end
 
 		chart_legends = @data.collect { |acc, data| "#{acc} (#{data[:last_followers]})" }
@@ -128,7 +137,7 @@ class Charts
       '&chxl='+ #axis values
         '0:|'+chart_labels.join('|')+'|'+
         '1:|Dates|'+
-        '2:|'+min.to_s+'|'+(max-min/4).to_s+'|'+((max-min)*2/4).to_s+'|'+((max-min)*3/4).to_s+'|'+max.to_s+'|'+
+        '2:|'+min.to_s+'|'+((max-min)/4).to_s+'|'+((max-min)*2/4).to_s+'|'+((max-min)*3/4).to_s+'|'+max.to_s+'|'+
         '3:|Followers'+
 
       '&chs=800x350'+ #dimensions
@@ -138,8 +147,8 @@ class Charts
       '&chf=bg,s,B2DFDA00|c,s,D6EEEB'+ #last 2 zeroes for bg makes it fully transparent
 
       '&chg='+(100.0/(chart_labels.length-1)).to_s+','+(100/4).to_s+
-				'&chls='+chart_lines_style.join('|')+ #line style (tickness, dash length, space length)
-      '&chm='+(line_colors.collect {|color| "o,#{color},#{c+=1},,6"} ).join('|') #bullets (type, color, datagroup, which points, size)
+			'&chls='+chart_lines_style.join('|')+ #line style (tickness, dash length, space length)
+      '&chm='+(line_colors.collect {|color| "o,#{color},#{c+=1},,5"} ).join('|') #bullets (type, color, datagroup, which points, size)
     }
 	end
 end
