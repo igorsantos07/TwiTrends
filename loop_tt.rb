@@ -3,7 +3,7 @@ LAST_RUN_FILENAME = ROOT_FOLDER+'last-run.time'
 LAST_TWEET_FILENAME = ROOT_FOLDER+'last-tweet.time'
 LOG_FILE = ROOT_FOLDER+'tt.log'
 TIME_OF_EACH_LOOP = 60
-TIME_OF_EACH_TWEET = 60*2 - 15 #15 seconds to let tt.rb run and then change the time of the file
+TIME_OF_EACH_TWEET = 60*20 - 15 #15 seconds to let tt.rb run and then change the time of the file
 
 def write_time_to_log
 		diff = (File.exist?(LAST_TWEET_FILENAME))? Time.now.to_i - File.new(LAST_TWEET_FILENAME).ctime.to_i : 'zzz'

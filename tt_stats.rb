@@ -40,7 +40,6 @@ YAML::load_file(yaml_file).each_pair do |account,data|
 	end
 
   if (!$debug)
-    puts "'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', #{acc_id}, Time.now.to_i, #{followers}"
     db.execute 'INSERT INTO stats (account, date, followers) VALUES (?,?,?)', acc_id, Time.now.to_i, followers
     db.execute 'UPDATE accounts SET tweets=? WHERE id=?', tweets, acc_id
   end
