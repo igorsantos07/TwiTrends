@@ -18,6 +18,7 @@ class Twitrends
     @format = '[%s] %s' # [time] Trending topics
   end
 
+  # If the argument is false or not set, won't tweet. Only show output to know it's working properly.
   def tweet for_real = false
     @start = Time.now
 
@@ -44,6 +45,7 @@ class Twitrends
 
   private
 
+  # Configures the Twitter Client and returns a new instance of it
   def get_twitter_client acc_data
     Twitter.configure do |c|
       c.consumer_key       = acc_data['consumer_key']
@@ -55,6 +57,8 @@ class Twitrends
     Twitter::Client.new
   end
 
+  # Returns the trends for the location of the woeid given (Where On Earth ID).
+  # A list of places and codes can be obtained from Twitter::Client#trend_location
   def get_trends woeid
     trends = ''
     got_error = false
@@ -72,6 +76,8 @@ class Twitrends
     trends
   end
 
+  # Will tweet the trends given (preferably an Array of 10 elements) if the second argument is true;
+  # if it's false, will only pretend to tweet, to show it's working (or not)
   def make_tweets trends, for_real
     now  = Time.now
     time = now.hour.to_s+'h'+('%02d'%now.min)
@@ -89,6 +95,7 @@ class Twitrends
     end
   end
 
+  # Concatenates the topics given, with a number in front of it. The second argument is from where begin counting; if given 5, the first number will be 6.
   def self.concat_trends trends, plus = 0
     trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' || ')
   end
