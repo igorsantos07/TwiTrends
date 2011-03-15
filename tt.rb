@@ -1,73 +1,96 @@
-ACCOUNTS_FILE = '/home/igoru/scripts/twitrends/accounts.yaml'
-
-start = Time.now
-
 require 'rubygems'
 require 'twitter'
 
-verbose = ARGV.any? { |v| v == '-v' || v == '--verbose' }
+class Twitrends
 
-if (ARGV.any? { |v| v == '-t' })
-	$debug = false
-	puts "Tweeting for real. If I should't do that, CTRL+C NOW! And then, run me again without -t flag, you bastard."
-else
-	$debug = true
-	puts "Entering debug mode (a.k.a. won't tweet for real). If you want to tweet, use -t flag and be happy."
-end
-
-$format = '[%s] %s' # [time] Trending topics
-
-YAML::load_file(ACCOUNTS_FILE).each_pair do |title, acc|
-  print "Getting Trending Topics and tweeting to #{title}..." if verbose
-
-  Twitter.configure do |c|
-    c.consumer_key       = acc['consumer_key']
-    c.consumer_secret    = acc['consumer_secret']
-    c.oauth_token        = acc['oauth_key']
-    c.oauth_token_secret = acc['oauth_secret']
-  end
-
-  twitter = Twitter::Client.new
-
-	trends = ''
-	got_error = false
-	while trends.empty? and (Time.now - start) < 60 * 15 do # gives up after 15 minutes
-		begin
-			print 'Trying to connect again. ' if got_error
-			trends = twitter.local_trends(acc['woeid'])
-		rescue SocketError, OpenSSL::SSL::SSLError, Errno::ECONNRESET => e
-      puts (verbose)? ' Oops! Are you connected ('+e.class.to_s+')? Trying again in 10 seconds.' : e.class.to_s
-			got_error = true
-			sleep 10
-		end
-	end
-
-  if !verbose
-    if trends.length == 10
-      puts 'OK for '+title
+  def accounts_file= path
+    if File.file?(path) and File.readable?(path)
+      @accounts_file = path
+      @accounts = YAML::load_file path
     else
-      puts "Something is wrong with the trends for #{title}: "+trends.inspect
+      raise ArgumentError, "accounts_file '#{path}' is not readable!"
     end
   end
 
-	def concat trends, plus=0
-		trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' || ')
-	end
+  def initialize accounts_file_path, verbose = false
+    self.accounts_file= accounts_file_path
+    @verbose = verbose
+    @format = '[%s] %s' # [time] Trending topics
+  end
 
-	now  = Time.now
-	time = now.hour.to_s+'h'+('%02d'%now.min)
+  def tweet for_real = false
+    @start = Time.now
 
-	[
-		$format % [time, concat(trends[5..9],5) ],
-		$format % [time, concat(trends[0..4]) ]
-	].each do |tweet|
-		if $debug
-			puts "Tweet (#{tweet.length} chars) >> "+tweet if verbose
-		else
-			twitter.update tweet
-			twitter.update "d igorgsantos Tweet over 140 chars (#{tweet.length})! \"#{tweet[0..80]}\"" if tweet.length > 140
-		end
-	end
+    @accounts.each_pair do |title, acc_data|
+      print "Getting Trending Topics and tweeting to #{title}..." if @verbose
 
-	puts '' if verbose
+      @twitter = get_twitter_client acc_data
+
+      trends = get_trends acc_data['woeid']
+      if trends.length == 10
+        puts (!@verbose)? 'OK for '+title : ''
+      elsif trends.length != 0
+        puts (!@verbose)? "Something is wrong with the trends for #{title}: "+trends.inspect : ''
+      elsif trends.length == 0
+        puts "Looks like there are no trends. =( Exiting..."
+        return false
+      end
+
+      make_tweets trends, for_real
+
+      puts '' if @verbose
+    end
+  end
+
+  private
+
+  def get_twitter_client acc_data
+    Twitter.configure do |c|
+      c.consumer_key       = acc_data['consumer_key']
+      c.consumer_secret    = acc_data['consumer_secret']
+      c.oauth_token        = acc_data['oauth_key']
+      c.oauth_token_secret = acc_data['oauth_secret']
+    end
+
+    Twitter::Client.new
+  end
+
+  def get_trends woeid
+    trends = ''
+    got_error = false
+    while trends.empty? and (Time.now - @start) < 60 * 15 do # gives up after 15 minutes
+      begin
+        print 'Trying to connect again. ' if got_error
+        trends = @twitter.local_trends woeid
+      rescue OpenSSL::SSL::SSLError, Errno::ECONNRESET => e
+        puts (@verbose)? ' Oops! Are you connected ('+e.class.to_s+')? Trying again in 10 seconds.' : e.class.to_s
+        got_error = true
+        sleep 10
+      end
+    end
+
+    trends
+  end
+
+  def make_tweets trends, for_real
+    now  = Time.now
+    time = now.hour.to_s+'h'+('%02d'%now.min)
+
+    tweets = [@format % [time, Twitrends.concat_trends(trends[5..9],5)],
+              @format % [time, Twitrends.concat_trends(trends[0..4])]]
+
+    tweets.each do |tweet|
+      if for_real
+        @twitter.update tweet
+        @twitter.update "d igorgsantos Tweet over 140 chars (#{tweet.length})! \"#{tweet[0..80]}\"" if tweet.length > 140
+      else
+        puts "Tweet (#{tweet.length} chars) >> "+tweet if @verbose
+      end
+    end
+  end
+
+  def self.concat_trends trends, plus = 0
+    trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' || ')
+  end
+
 end
