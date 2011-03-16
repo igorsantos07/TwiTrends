@@ -66,7 +66,7 @@ class Twitrends
       begin
         print 'Trying to connect again. ' if got_error
         trends = @twitter.local_trends woeid
-      rescue OpenSSL::SSL::SSLError, Errno::ECONNRESET => e
+      rescue SocketError, OpenSSL::SSL::SSLError, Errno::ECONNRESET => e
         puts (@verbose)? ' Oops! Are you connected ('+e.class.to_s+')? Trying again in 10 seconds.' : e.class.to_s
         got_error = true
         sleep 10
