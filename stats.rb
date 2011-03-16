@@ -12,7 +12,7 @@ else
 	puts "Entering debug mode (a.k.a. won't save data for real). If you want to tweet, use -t flag and be happy."
 end
 
-db = SQLite3::Database.new((File.exists? 'stats.db')? 'stats.db' : $LOAD_PATH[0]+'/stats.db')
+db = SQLite3::Database.new((File.exists? 'stats/stats.db')? 'stats/stats.db' : $LOAD_PATH[0]+'/stats/stats.db')
 
 yaml_file = (File.exists? 'accounts.yaml')? 'accounts.yaml' : $LOAD_PATH[0]+'/accounts.yaml'
 YAML::load_file(yaml_file).each_pair do |account,data|

@@ -5,3 +5,4 @@ accounts.yaml
 *.time
 *.log
 *.pid
+daemon_files/
