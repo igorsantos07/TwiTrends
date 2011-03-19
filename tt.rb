@@ -8,7 +8,7 @@ else
 	puts "Entering debug mode (a.k.a. won't tweet for real). If you want to tweet, use -t flag and be happy."
 end
 
-require './Twitrends'
+require 'Twitrends'
 
 twitrends = Twitrends.new '/home/igoru/scripts/twitrends/accounts.yaml', verbose
 twitrends.tweet for_real

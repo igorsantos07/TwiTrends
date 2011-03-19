@@ -16,12 +16,11 @@ class Twitrends
     self.accounts_file= accounts_file_path
     @verbose = verbose
     @format = '[%s] %s' # [time] Trending topics
+    @start = Time.now
   end
 
   # If the argument is false or not set, won't tweet. Only show output to know it's working properly.
   def tweet for_real = false
-    @start = Time.now
-
     @accounts.each_pair do |title, acc_data|
       print "Getting Trending Topics and tweeting to #{title}..." if @verbose
 
