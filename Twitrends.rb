@@ -16,7 +16,6 @@ class Twitrends
   def initialize accounts_file_path, verbose = false
     self.accounts_file= accounts_file_path
     @verbose = verbose
-    @format = '[%s] %s' # [time] Trending topics
     @start = Time.now
   end
 
@@ -82,8 +81,7 @@ class Twitrends
     now  = Time.now
     time = now.hour.to_s+'h'+('%02d'%now.min)
 
-    tweets = [@format % [time, Twitrends.concat_trends(trends[5..9],5)],
-              @format % [time, Twitrends.concat_trends(trends[0..4])]]
+    tweets = [Twitrends.concat_trends(trends[5..9],5), Twitrends.concat_trends(trends[0..4])+' [...]']
 
     tweets.each do |tweet|
       if for_real
