@@ -8,6 +8,6 @@ How to install
 `$ sudo gem install twitter addressable hashie multipart-post`  
 
 `$ cd <<pasta>>`  
-`$ git clone git://codaset.com/igorsantos07/twitrends.git twitrends`  
+`$ git clone git://github.com/igorsantos07/TwiTrends.git twitrends`  
 
 `$ sudo echo "/20 * * * *   root   ruby -rubygems -I <<pasta>>/twitrends/ <<pasta>>/tt.rb >>/var/log/twitrends.log 2>&1" >> /etc/crontab`  
