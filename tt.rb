@@ -10,5 +10,5 @@ end
 
 require 'Twitrends'
 
-twitrends = Twitrends.new '/home/igoru/scripts/twitrends/accounts.yaml', verbose
+twitrends = Twitrends.new 'accounts.yaml', verbose
 twitrends.tweet for_real

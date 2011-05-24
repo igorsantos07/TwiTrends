@@ -1,5 +1,6 @@
 start = Time.now
 
+require 'rubygems'
 require 'sqlite3'
 require 'yaml'
 require 'twitter'

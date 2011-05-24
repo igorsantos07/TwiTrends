@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'twitter'
+require 'yaml'
 
 class Twitrends
 
