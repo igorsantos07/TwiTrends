@@ -1,6 +1,7 @@
 How to install
 ==============
 
+
 `$ sudo apt-get remove rubygems1.8`  
 `$ wget http://mirror.linux.org.au/ubuntu//pool/universe/libg/libgems-ruby/rubygems1.8_1.3.7-2_all.deb`  
 `$ sudo dpkg -i rubygems1.8_1.3.7-2_all.deb`  
