@@ -1,5 +1,6 @@
 start = Time.now
 
+
 require 'rubygems'
 require 'sqlite3'
 require 'yaml'
@@ -7,7 +8,7 @@ require 'twitter'
 
 if (ARGV[0] == '-t')
 	$debug = false
-	puts "Saving data for real. If I should't do that, CTRL+C NOW! And then, run me again without -t flag, you bastard."
+	puts "[#{start}] Saving data for real. If I should't do that, CTRL+C NOW! And then, run me again without -t flag, you bastard."
 else
 	$debug = true
 	puts "Entering debug mode (a.k.a. won't save data for real). If you want to tweet, use -t flag and be happy."
