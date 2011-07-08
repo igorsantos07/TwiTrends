@@ -86,9 +86,14 @@ class Twitrends
               @format % [time, Twitrends.concat_trends(trends[0..4])]]
 
     tweets.each do |tweet|
-      if for_real
-        @twitter.update tweet
-        @twitter.update "d igorgsantos Tweet over 140 chars (#{tweet.length})! \"#{tweet[0..80]}\"" if tweet.length > 140
+	@twitter.inspect
+      if !for_real
+        if tweet.length > 140
+		@twitter.update "d igorgsantos Tweet for XX over 140 chars (#{tweet.length})! \"#{tweet[0..50]}\""
+		puts "GIANT TWEET! (#{tweet.length} chars) >> "+tweet
+	else
+	        @twitter.update tweet
+	end
       else
         puts "Tweet (#{tweet.length} chars) >> "+tweet if @verbose
       end
