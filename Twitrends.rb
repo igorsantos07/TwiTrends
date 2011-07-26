@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'twitter'
 require 'yaml'
+require 'ap'
 
 class Twitrends
 
@@ -37,7 +38,7 @@ class Twitrends
         return false
       end
 
-      make_tweets trends, for_real
+      send_tweets trends, for_real
 
       puts '' if @verbose
     end
@@ -78,31 +79,42 @@ class Twitrends
 
   # Will tweet the trends given (preferably an Array of 10 elements) if the second argument is true;
   # if it's false, will only pretend to tweet, to show it's working (or not)
-  def make_tweets trends, for_real
+  def send_tweets trends, for_real
     now  = Time.now
     time = now.hour.to_s+'h'+('%02d'%now.min)
+		@@part = 0
 
-    tweets = [@format % [time, Twitrends.concat_trends(trends[5..9],5)],
-              @format % [time, Twitrends.concat_trends(trends[0..4])]]
+    [trends[5..9], trends[0..4]].each do |trends_part|
+			max_length = 50
+			begin
+				tweet = make_tweet time, trends_part, max_length
+				max_length = max_length - 2
+				puts 'giant tweet, will need to make it again...' if (!for_real && @verbose && tweet.length > 140)
+			end while tweet.length > 140
 
-    tweets.each do |tweet|
-	@twitter.inspect
-      if !for_real
+      if for_real
         if tweet.length > 140
-		@twitter.update "d igorgsantos Tweet for XX over 140 chars (#{tweet.length})! \"#{tweet[0..50]}\""
-		puts "GIANT TWEET! (#{tweet.length} chars) >> "+tweet
-	else
+					@twitter.update "d igorgsantos Tweet for XX over 140 chars (#{tweet.length})! \"#{tweet[0..50]}\""
+					puts "GIANT TWEET! (#{tweet.length} chars) >> "+tweet
+				else
 	        @twitter.update tweet
-	end
+				end
       else
         puts "Tweet (#{tweet.length} chars) >> "+tweet if @verbose
       end
     end
   end
 
-  # Concatenates the topics given, with a number in front of it. The second argument is from where begin counting; if given 5, the first number will be 6.
-  def self.concat_trends trends, plus = 0
-    trends.collect { |v| i = trends.index(v)+1+plus; "#{i.to_s}. #{v}" } .join(' || ')
-  end
+	def make_tweet time, trends, max_length
+		@@part = @@part + 1
+
+		start = (@@part == 2)? 5 : 0
+		trends_concat = trends.collect do |trend|
+			i = trends.index(trend) + start + 1
+			trend = trend[0..(max_length-4)]+'(..)' if (trend.length > max_length)
+			"#{i.to_s}. #{trend}"
+		end.join(' || ')
+		@format % [time, trends_concat]
+	end
 
 end
