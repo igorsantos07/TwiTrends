@@ -1,7 +1,7 @@
-require 'rubygems'
-require 'twitter'
+require 'bundler/setup'
+
 require 'yaml'
-require 'ap'
+require 'twitter'
 
 class Twitrends
 

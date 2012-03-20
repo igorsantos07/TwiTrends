@@ -1,11 +1,5 @@
 start = Time.now
 
-
-require 'rubygems'
-require 'sqlite3'
-require 'yaml'
-require 'twitter'
-
 if (ARGV[0] == '-t')
 	$debug = false
 	puts "[#{start}] Saving data for real. If I should't do that, CTRL+C NOW! And then, run me again without -t flag, you bastard."
